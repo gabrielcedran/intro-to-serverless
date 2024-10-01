@@ -27,3 +27,12 @@ In a nutshell, lambdas (or serverless functions) consist of a handler function (
 When working with `serverless framework`, it automates the deploy to aws. All details are set in the `serverless.yml` file (programming language being used, functions being deployed and their respective handlers, etc).
 
 Sample application: `hello-world`. Run with `serverless invoke local -f hello -p src/event.json`
+
+### Cloudformation
+
+Instead of opening individual services on aws dashboard, provisioning them individually and tying them together,
+cloudformation is an api can be used from the CLI to create a configuration file in order have the all the necessary services provisioned.
+
+_Serverless framework is a kind of an abstraction on top of Cloudformation_
+
+_ps: not necessarily all aws services are supported on cloudformation, but it keeps being extended as new services are created (so does serverless framework)_
