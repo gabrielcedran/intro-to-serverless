@@ -36,3 +36,20 @@ cloudformation is an api can be used from the CLI to create a configuration file
 _Serverless framework is a kind of an abstraction on top of Cloudformation_
 
 _ps: not necessarily all aws services are supported on cloudformation, but it keeps being extended as new services are created (so does serverless framework)_
+
+### CloudFront
+
+It's amazong CDN solution.
+
+### API Gateway
+
+It's like a proxy between anything external to AWS and anything internal: like a lambda function.
+
+It can be used to route http requests into lambdas. To do so, a lambda has to subscribe to the event `API Gateway AWS Proxy`. The event is huge, but the most important properties are: `body` (http request body), `resource` (the url) and `identity` (logged in user).
+
+`Regular` vs `Proxy` API Gateway: proxy allows the lambda to determine what the response is while regular has to have the format of the response defined within the API Gateway service (_velocity templates?_).
+
+#### Other API Gateways
+
+There are other gateways, like Kong, that can integrate with lambdas but is not provided by amazon.
+Api Gateway is amazon's solution.
