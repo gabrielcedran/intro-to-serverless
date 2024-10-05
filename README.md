@@ -28,6 +28,18 @@ When working with `serverless framework`, it automates the deploy to aws. All de
 
 Sample application: `hello-world`. Run with `serverless invoke local -f hello -p src/event.json`
 
+## Cold starts
+
+When a lambda is called for the first time, AWS creates a container and then your function is executed. There's known a cold start and it has overhead.
+
+Lambdas are recycled after some time of unusage and gets recreated once it's used again. This might impact efficiency and needs to be thought carefully.
+
+Sync vs Async? A cold lambda calling another cold lambda? Database connections being created within those lambdas?
+
+_to prevent lambdas going cold, you can call them regularly or use cloudwatch service_
+
+_lambda is charged per usage, however the minimum that will be charged is 100 milliseconds_
+
 ### Cloudformation
 
 Instead of opening individual services on aws dashboard, provisioning them individually and tying them together,
@@ -41,6 +53,10 @@ _ps: not necessarily all aws services are supported on cloudformation, but it ke
 
 It's amazong CDN solution.
 
+### Incognito
+
+Amazon's version of Auth0.
+
 ### API Gateway
 
 It's like a proxy between anything external to AWS and anything internal: like a lambda function.
@@ -53,3 +69,59 @@ It can be used to route http requests into lambdas. To do so, a lambda has to su
 
 There are other gateways, like Kong, that can integrate with lambdas but is not provided by amazon.
 Api Gateway is amazon's solution.
+
+#### Setting up API Gateway locally - for development
+
+`serverless-offline` is a serverless framework plugin that creates a local gateway to emulate
+amazon's API Gateways and call functions with events close to the real ones (as though on AWS).
+
+API Gateway is effectively a long lived process / server, however our lambdas are still serverless.
+
+**Installation:**
+
+1. `npm i -D serverless-offline`
+2. inside `serverless.yml` create a attribute `plugins` with the value `- serverless-offline`
+
+To run, simply execute `serverless offline` (or create a convenience script on `package.json`)
+
+**Request:**
+
+When using serverless framework, defining an http gateway requires the declaration of a regular function plus the definition of the event that it subscripts with its details:
+
+_shorthand_
+
+```yaml
+api:
+  handler: src/api/api.handler
+  events:
+    - httpApi: GET /api
+```
+
+_More advanced configs (way more available):_
+
+```yaml
+api:
+  handler: src/api/api.handler
+  events:
+    - httpApi:
+        path: /api
+        method: GET
+        cors: true
+```
+
+In the example above, whenever a request is performed to `/api`, the function `handler` of the file `api.js` is going to be called.
+
+_ps remember that the event comes formatted according to the event being subscribed_
+
+**Response:**
+When defining the gateway function, it's important to provide the callback response following the expected format, so that api gateway can parse it and provide proper response to the client:
+
+```javascript
+callback(null, {
+  statusCode: 200,
+  headers: {},
+  body: JSON.stringify({
+    // sth
+  }),
+});
+```

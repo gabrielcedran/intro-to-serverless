@@ -1,0 +1,33 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: gabecdn
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: serverless-demo
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: api-gateway
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+
+plugins:
+  - serverless-offline
+
+functions:
+  api:
+    handler: src/api/api.handler
+    events:
+      - httpApi: GET /api
+
+  todos:
+    handler: src/api/todos.handler
+    events:
+      - httpApi:
+          path: /api/todos
+          method: GET
+
+  todo:
+    handler: src/api/todo.handler
+    events:
+      - httpApi:
+          path: /api/todos/{id}
+          method: GET
