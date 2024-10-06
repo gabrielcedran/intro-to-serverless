@@ -125,3 +125,31 @@ callback(null, {
   }),
 });
 ```
+
+#### Deploying
+
+It's possible to configure every single detail of the deploy in the serverless.yaml (region, stage, etc). _ps default region is us-east-1 and stage is dev_. _All configs can be overridden via env variables_
+
+`sls deploy` to deploy the service to aws.
+
+##### Amazon Key Management System (KMS)
+
+Is amazon solution for encryption - e.g encrypt environment variables, which would require the application to decrypt before usage.
+
+##### Roles
+
+By default serverless creates IAM execution roles for services (lambdas). It consists of `{service_name}`-`{stage}`-`{region}`-`lambdaRole`. If the lambdas need to execute another lambdas and or services (e.g S3, DynamoDB, etc), it's necessary to give permission to that role.
+
+##### Avoid bundling modules
+
+The deploy artifact can getting fairly big depending on the projects dependencies. There are ways to avoid bundling unnecessary modules depending on the project's set up. Eg: there are servless plugins like dedupe, serverless-webpack, etc.
+
+##### Basic Configs
+
+Within the lambda dashboard, it's possible to define memory, timeouts, etc to control spendings.
+
+##### VPC
+
+It's like a private network / internet gateway that enables lambdas to talk to the internet - without it, lambdas would't be to access external services and apis. _you need to set up a vpc that connects to an internet gateway_
+
+_everything can be setup via serverless.yml instead of directly on amazon console (env variable, execution role, function settings (memory, timeout), tags, vpc, etc)_

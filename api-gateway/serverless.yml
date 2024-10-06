@@ -8,6 +8,8 @@ service: api-gateway
 provider:
   name: aws
   runtime: nodejs20.x
+  region: us-east-1
+  stage: dev
 
 plugins:
   - serverless-offline
