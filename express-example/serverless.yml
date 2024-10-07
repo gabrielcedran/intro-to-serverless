@@ -3,12 +3,22 @@ org: gabecdn
 # "app" enables Serverless Framework Dashboard features and sharing them with other Services.
 app: serverless-demo
 # "service" is the name of this project. This will also be added to your AWS resource names.
-service: hello-world
+service: express-example
 
 provider:
   name: aws
   runtime: nodejs20.x
 
+plugins:
+  - serverless-offline
+
 functions:
-  hello:
-    handler: src/handler.helloWorld
+  api:
+    handler: src/api/api.handler
+    events:
+      - httpApi:
+          method: ANY
+          path: /
+      - httpApi:
+          method: ANY
+          path: "/{param+}"

@@ -153,3 +153,21 @@ Within the lambda dashboard, it's possible to define memory, timeouts, etc to co
 It's like a private network / internet gateway that enables lambdas to talk to the internet - without it, lambdas would't be to access external services and apis. _you need to set up a vpc that connects to an internet gateway_
 
 _everything can be setup via serverless.yml instead of directly on amazon console (env variable, execution role, function settings (memory, timeout), tags, vpc, etc)_
+
+### Other ways of handling routing
+
+It's possible to use express, which is closed to how a traditional server/api would have been created.
+
+In a nutshell, what is needed to do so is the following:
+
+API Gateway -> Lambda -> Express
+
+In this case, the API gateway would have just one proxy endpoint and it would delegate to express the responsibility of routing.
+
+ps: It's just using the routing part of `express`, without the server part which keeps listening on a port in order to server http requests. `express without the server`.
+
+_having authorizers helps your api to remain protected from web crawlers and attackers and cost effective as the requests don't get out of the gateway_
+
+_authorizer is a lambda function that sits in front of your lambda functions (it can even be moved to the application edge `cloudfront` so that the requests don't hit anything)_
+
+_when creating an enterprise app with components like s3, dynamodb, kinesis, etc, it's not a good approach to use express, because you'd end up creating a big old express style app, which would end up fat and expensive to run (if not bumping into limits like, memory, file size, etc)_
