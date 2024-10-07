@@ -171,3 +171,7 @@ _having authorizers helps your api to remain protected from web crawlers and att
 _authorizer is a lambda function that sits in front of your lambda functions (it can even be moved to the application edge `cloudfront` so that the requests don't hit anything)_
 
 _when creating an enterprise app with components like s3, dynamodb, kinesis, etc, it's not a good approach to use express, because you'd end up creating a big old express style app, which would end up fat and expensive to run (if not bumping into limits like, memory, file size, etc)_
+
+### Testing
+
+It should be pretty much the same as testing anything else in javascript. Hint: do not try to test the lambda invokation itself (handler), but isolate the business logic and test it directly.
